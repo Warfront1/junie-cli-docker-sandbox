@@ -1,0 +1,32 @@
+# --- API Keys & Secrets ---
+.env
+.env.local
+.env.*.local
+*.env
+
+# --- JetBrains IDEs (IntelliJ, PyCharm, etc.) ---
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+gen/
+
+# --- Junie ---
+.junie/
+
+# --- VS Code ---
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# --- Docker & System ---
+.docker/
+Thumbs.db
+.DS_Store
+*.log
+*.tmp
+*.temp
