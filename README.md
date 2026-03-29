@@ -7,10 +7,8 @@ See [Current Problems](#current-problems) for why the security level of this rep
 
 ```mermaid
 flowchart LR
-    A[Junie CLI in Docker Sandbox] -->|proxychains| B[GOST Forward Proxy<br/>localhost:55432]
-    B -->|proxies via| C[Docker Sandbox Proxy<br/>host.docker.internal:3128]
-    C -->|connects to| D[JetBrains Servers<br/>junie.jetbrains.com/etc.]
-    D -->|Response| C
+    A[Junie CLI in Docker Sandbox] -->|JAVA_TOOL_OPTIONS proxy| B[Docker Sandbox Proxy<br/>host.docker.internal:3128]
+    B -->|connects to| C[JetBrains Servers<br/>junie.jetbrains.com/etc.]
     C -->|Response| B
     B -->|Response| A
 ```
@@ -38,38 +36,6 @@ Authentication currently requires manual configuration in the sandbox.
 Currently, only the manual entry of `Provide Junie API key` within the Sandbox is supported.  
 See the [Junie CLI Tokens](https://junie.jetbrains.com/cli) for details.
 
-## How It Works
-
-The sandbox uses a multi-layer proxy approach:
-
-1. **GOST Forward Proxy** - Runs inside the sandbox on `localhost:55432`
-2. **Proxychains** - Forces Junie traffic through the local GOST proxy
-3. **Docker Sandbox Proxy** - GOST forwards to the sandbox's built-in proxy at `host.docker.internal:3128`
-4. **External Access** - The sandbox proxy connects to JetBrains servers
-
-This approach bypasses the Docker sandbox network restrictions by routing all traffic through the sandbox's built-in proxy which already has proper certificate handling.
-
-> **Why GOST + Proxychains?** Docker Sandboxes block direct connections to external IPs via network policies, and the `--allow-host`/`--bypass-host` options didn't work for JetBrains' dynamic cloud IPs. However, the sandbox's built-in proxy (`host.docker.internal:3128`) is designed to provide controlled outbound access. By routing Junie's traffic through GOST to this built-in proxy, we're using the intended outbound path rather than fighting the network restrictions.
->
-> **How does this bypass the block?** The built-in proxy runs on the **host**, not inside the sandbox container. The sandbox network policy only restricts traffic originating from inside the container. When traffic goes through `host.docker.internal:3128`, the host makes the actual outbound connection on your behalf - and the host has full network access.
->
-> ```
-> ❌ Junie → direct to 34.54.111.18 → BLOCKED (container policy applies)
->
-> ✅ Junie → GOST → host.docker.internal:3128 → 34.54.111.18 → ALLOWED (host makes the connection)
-> ```
-
-## JetBrains Endpoints
-
-Junie connects to the following JetBrains endpoints. If you experience connectivity issues, check `docker sandbox network log` for blocked requests:
-
-- `junie.jetbrains.com`
-- `ingrazzio-cloud-prod.labs.jb.gg`
-- `resources.jetbrains.com`
-- `api.jetbrains.ai`
-
-> **Note:** These domains may change. Use `docker sandbox network log` to discover blocked requests.
-
 ## Helpful Commands
 
 ### View Network Logs
@@ -78,15 +44,6 @@ Check for blocked requests:
 
 ```shell
 docker sandbox network log
-```
-
-### View Junie Proxy Logs
-
-Inside the sandbox:
-
-```shell
-cat /tmp/junie-proxy.log
-cat /tmp/gost.log
 ```
 
 ### Cleanup ALL Sandboxes
@@ -119,19 +76,7 @@ This repository addresses the following limitations, which will be resolved as u
 
 ---
 
-### Issue 2: IP and Host Whitelisting
-
-**Problem:** Docker Sandboxes have limitations with certain IP and host whitelisting rules.
-
-**Current Workaround:** All traffic is routed through the GOST proxy, permitting all outbound connections.
-
-**Status:** [#199](https://github.com/docker/desktop-feedback/issues/199), [#220](https://github.com/docker/desktop-feedback/issues/220)
-
-**Resolution:** The GOST proxy layer can be removed in favor of the built-in proxy configuration.
-
----
-
-### Issue 3: No Official Junie Support
+### Issue 2: No Official Junie Support
 
 **Problem:** Docker Sandboxes do not officially support Junie at this time.
 

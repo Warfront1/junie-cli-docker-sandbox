@@ -2,14 +2,8 @@ FROM docker/sandbox-templates:shell
 
 USER root
 
-RUN apt-get update && apt-get install -y curl proxychains4 openjdk-17-jre-headless \
+RUN apt-get update && apt-get install -y curl openjdk-17-jre-headless \
     && rm -rf /var/lib/apt/lists/*
-
-# Download GOST for Linux
-RUN curl -fsSL https://github.com/ginuerzh/gost/releases/download/v2.11.5/gost-linux-amd64-2.11.5.gz -o /tmp/gost.gz && \
-    gunzip /tmp/gost.gz && \
-    mv /tmp/gost /usr/local/bin/gost && \
-    chmod +x /usr/local/bin/gost
 
 RUN curl -fsSL https://junie.jetbrains.com/install.sh | bash && \
     mv /root/.local/bin/junie /usr/local/bin/junie && \
@@ -17,10 +11,11 @@ RUN curl -fsSL https://junie.jetbrains.com/install.sh | bash && \
     chmod +x /usr/local/bin/junie
 
 ENV JUNIE_DATA=/usr/local/share/junie
+ENV JAVA_TOOL_OPTIONS="-Dhttps.proxyHost=host.docker.internal -Dhttps.proxyPort=3128 -Dhttp.proxyHost=host.docker.internal -Dhttp.proxyPort=3128"
 
-COPY run-junie.sh /usr/local/bin/run-junie.sh
-RUN chmod +x /usr/local/bin/run-junie.sh
+COPY import-ca.sh /usr/local/bin/import-ca.sh
+RUN chmod +x /usr/local/bin/import-ca.sh
 
 USER agent
 
-RUN echo '/usr/local/bin/run-junie.sh' >> /home/agent/.bashrc
+RUN echo '/usr/local/bin/import-ca.sh && junie' >> /home/agent/.bashrc
