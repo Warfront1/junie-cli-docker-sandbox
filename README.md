@@ -1,6 +1,6 @@
 # junie-cli-docker-sandbox
 
-A decently secure way to run Junie CLI in a Docker Sandbox until official Docker support is added.
+A decently secure way to run Junie CLI in a Docker Sandbox until official Docker support is added.  
 See [Current Problems](#current-problems) for why the security level of this repo is lower than official support.
 
 ## Architecture
@@ -113,7 +113,7 @@ This repository addresses the following limitations, which will be resolved as u
 
 **Current Workaround:** Users must manually enter their Junie API key within the Sandbox environment.
 
-**Status:** [github.com/docker/desktop-feedback/issues/130](https://github.com/docker/desktop-feedback/issues/130)
+**Status:** [#130](https://github.com/docker/desktop-feedback/issues/130)
 
 **Resolution:** Once resolved, credential handling can be externalized and the API key removed from the Sandbox environment.
 
@@ -125,7 +125,7 @@ This repository addresses the following limitations, which will be resolved as u
 
 **Current Workaround:** All traffic is routed through the GOST proxy, permitting all outbound connections.
 
-**Status:** [github.com/docker/desktop-feedback/issues/220](https://github.com/docker/desktop-feedback/issues/220)
+**Status:** [#199](https://github.com/docker/desktop-feedback/issues/199), [#220](https://github.com/docker/desktop-feedback/issues/220)
 
 **Resolution:** The GOST proxy layer can be removed in favor of the built-in proxy configuration.
 
