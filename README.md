@@ -1,6 +1,7 @@
 # junie-cli-docker-sandbox
 
-A secure way to run Junie CLI in a Docker Sandbox until official Docker support is added.
+A decently secure way to run Junie CLI in a Docker Sandbox until official Docker support is added.
+See [Current Problems](#current-problems) for why the security level of this repo is lower than official support.
 
 ## Architecture
 
@@ -101,6 +102,45 @@ Save your configured sandbox as a reusable template:
 ```shell
 docker sandbox save junie-sandbox my-junie-template:v1
 ```
+
+## Current Problems
+
+This repository addresses the following limitations, which will be resolved as upstream fixes become available.
+
+### Issue 1: Custom Credential Injection
+
+**Problem:** Docker Sandboxes lack native support for scalable credential injection.
+
+**Current Workaround:** Users must manually enter their Junie API key within the Sandbox environment.
+
+**Status:** [github.com/docker/desktop-feedback/issues/130](https://github.com/docker/desktop-feedback/issues/130)
+
+**Resolution:** Once resolved, credential handling can be externalized and the API key removed from the Sandbox environment.
+
+---
+
+### Issue 2: IP and Host Whitelisting
+
+**Problem:** Docker Sandboxes have limitations with certain IP and host whitelisting rules.
+
+**Current Workaround:** All traffic is routed through the GOST proxy, permitting all outbound connections.
+
+**Status:** [github.com/docker/desktop-feedback/issues/220](https://github.com/docker/desktop-feedback/issues/220)
+
+**Resolution:** The GOST proxy layer can be removed in favor of the built-in proxy configuration.
+
+---
+
+### Issue 3: No Official Junie Support
+
+**Problem:** Docker Sandboxes do not officially support Junie at this time.
+
+**Current Workaround:** This repository provides a community-maintained implementation.
+
+**Status:** [Supported agents list](https://docs.docker.com/ai/sandboxes/agents/)
+
+**Resolution:** Official support will eliminate the need for this entire repository.
+
 
 ## Resources
 
