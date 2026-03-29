@@ -34,8 +34,8 @@ Junie will start automatically inside the sandbox.
 ### Authentication
 
 Authentication currently requires manual configuration in the sandbox.  
-At this moment, only the manual entry of `Provide Junie API key` within the Docker Sandbox is supported.
-See the [Junie CLI authentication docs](https://junie.jetbrains.com/docs/junie-cli.html#step-3-authenticate) for details.
+Currently, only the manual entry of `Provide Junie API key` within the Sandbox is supported.  
+See the [Junie CLI Tokens](https://junie.jetbrains.com/cli) for details.
 
 ## How It Works
 
