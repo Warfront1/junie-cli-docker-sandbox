@@ -145,5 +145,5 @@ This repository addresses the following limitations, which will be resolved as u
 ## Resources
 
 - [Junie CLI Documentation](https://junie.jetbrains.com/docs/junie-cli.html)
-- [Docker Sandboxes Documentation](https://docs.docker.com/ai/sandbox-templates/)
+- [Docker Sandboxes CLI Documentation](https://docs.docker.com/reference/cli/docker/sandbox/)
 - [Junie API Key](https://junie.jetbrains.com/cli)
