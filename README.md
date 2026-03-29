@@ -14,62 +14,27 @@ flowchart LR
     B -->|Response| A
 ```
 
-## Prerequisites
-
-1. **Docker Desktop 4.61 or later** with Docker Sandboxes enabled
-2. **API Keys** for your preferred LLM provider(s):
-   - `ANTHROPIC_API_KEY` - for Claude models
-   - `OPENAI_API_KEY` - for GPT models
-   - `GOOGLE_API_KEY` - for Gemini models
-   - Or other supported providers
-
 ## Setup
 
-### 1. Configure API Keys
-
-Set your API keys in your shell configuration file:
-
-```shell
-# Add to ~/.bashrc or ~/.zshrc
-export ANTHROPIC_API_KEY=sk-ant-xxxxx
-export OPENAI_API_KEY=sk-xxxxx
-export GOOGLE_API_KEY=AIzaSyxxxxx
-```
-
-Apply the changes and restart Docker Desktop:
-
-```shell
-source ~/.bashrc  # or ~/.zshrc
-```
-
-> **Note:** Restart Docker Desktop so the daemon picks up the environment variables. The proxy reads credentials from your host environment and injects them into API requests automatically. Credentials are never stored inside the sandbox.
-
-### 2. Build the Sandbox
+### 1. Build the Sandbox
 
 ```shell
 docker build -t junie-cli-sandbox:v1 .
 ```
 
-### 3. Run the Sandbox
+### 2. Run the Sandbox
 
 ```shell
 # Navigate to the directory you wish to run Junie on
 docker sandbox run -t junie-cli-sandbox:v1 --name junie-sandbox shell
+# Once the sandbox is running and you are inside of it, execute the following command to start Junie
+run-junie.sh
 ```
 
-### 4. Run Junie
+### Authentication
 
-```shell
-docker sandbox exec junie-sandbox -- run-junie.sh
-```
-
-### Authentication Options
-
-Inside the sandbox, you can authenticate using:
-
-1. **JetBrains Account** - Log in with your JetBrains subscription
-2. **JUNIE_API_KEY** - Usage-based billing (generate at junie.jetbrains.com/cli)
-3. **Bring Your Own Key (BYOK)** - Use your own API keys from Anthropic, OpenAI, Google, etc.
+Authentication currently requires manual configuration in the sandbox.  
+See the [Junie CLI authentication docs](https://junie.jetbrains.com/docs/junie-cli.html#step-3-authenticate) for details.
 
 ## How It Works
 
@@ -102,15 +67,6 @@ Junie connects to the following JetBrains endpoints. If you experience connectiv
 - `api.jetbrains.ai`
 
 > **Note:** These domains may change. Use `docker sandbox network log` to discover blocked requests.
-
-## Headless Mode (Non-interactive)
-
-Run Junie CLI programmatically in CI/CD environments:
-
-```shell
-docker sandbox run -t junie-cli-sandbox:v1 --name junie-sandbox shell
-docker sandbox exec junie-sandbox -- run-junie.sh --auth="$JUNIE_API_KEY" "Review and fix any code quality issues"
-```
 
 ## Helpful Commands
 
