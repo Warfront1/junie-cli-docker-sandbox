@@ -30,3 +30,6 @@ Thumbs.db
 *.log
 *.tmp
 *.temp
+
+# --- AI output ---
+.output.txt
