@@ -27,13 +27,14 @@ docker build -t junie-cli-sandbox:v1 .
 ```shell
 # Navigate to the directory you wish to run Junie on
 docker sandbox run -t junie-cli-sandbox:v1 --name junie-sandbox shell
-# Once the sandbox is running and you are inside of it, execute the following command to start Junie
-run-junie.sh
 ```
+
+Junie will start automatically inside the sandbox.
 
 ### Authentication
 
 Authentication currently requires manual configuration in the sandbox.  
+At this moment, only the manual entry of `Provide Junie API key` within the Docker Sandbox is supported.
 See the [Junie CLI authentication docs](https://junie.jetbrains.com/docs/junie-cli.html#step-3-authenticate) for details.
 
 ## How It Works

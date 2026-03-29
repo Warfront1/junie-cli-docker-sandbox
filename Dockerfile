@@ -22,3 +22,5 @@ COPY run-junie.sh /usr/local/bin/run-junie.sh
 RUN chmod +x /usr/local/bin/run-junie.sh
 
 USER agent
+
+RUN echo '/usr/local/bin/run-junie.sh' >> /home/agent/.bashrc
